@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EZpay Customer Service</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background: white;
+        font-family: Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+        min-height: 100vh;
+      }
+      .top-section {
+        text-align: center;
+        margin: 20px 0;
+      }
+      .top-section img {
+        width: 90px;
+        height: 90px;
+        border-radius: 10%;
+      }
+      .top-section p {
+        margin-top: 15px;
+        font-size: 20px;
+      }
+      form {
+        margin-top: 20px;
+        width: 100%;
+        max-width: 380px;
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+      form h3 {
+        text-align: center;
+        margin-bottom: 15px;
+      }
+      label {
+        font-size: 14px;
+        color: #444;
+      }
+      input {
+        width: 100%;
+        padding: 16px;
+        margin: 10px 0 18px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 14px;
+      }
+      .btn {
+        width: 100%;
+        padding: 16px;
+        background: #6e41ec;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 17px;
+        cursor: pointer;
+      }
+      .btn:disabled {
+        opacity: 0.7;
+      }
+      .create {
+        margin-top: 20px;
+        text-align: center;
+        font-size: 14px;
+        color: rgba(105, 31, 189, 0.8);
+      }
+      @media (max-width: 480px) {
+        body {
+          padding: 15px;
+        }
+        .top-section p {
+          font-size: 17px;
+        }
+        input {
+          padding: 14px;
+        }
+        .btn {
+          padding: 14px;
+          font-size: 16px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="top-section">
+      <img src="LOGO.png" alt="Logo" />
+      <p>Safe, simple and efficient</p>
+    </div>
+
+    <form id="loginForm">
+      <h3>CREATE NEW ACCOUNT</h3>
+      <p
+        id="loginSuccess"
+        style="
+          display: none;
+          color: #1b1f34;
+          font-weight: bold;
+          margin-bottom: 10px;
+        "
+      ></p>
+
+      <label>Phone</label>
+      <input type="text" id="phone" placeholder="Enter Phone Number" required />
+
+      <label>Password</label>
+      <div style="position: relative">
+        <input
+          type="password"
+          id="password"
+          placeholder="Please Enter Password"
+          required
+        />
+        <span
+          onclick="togglePassword()"
+          style="
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+          "
+          >👁</span
+        >
+      </div>
+
+      <button class="btn" id="loginBtn">SIGN IN</button>
+      <p class="create">create new account?</p>
+    </form>
+
+    <script type="module">
+      import { API_BASE_URL } from "./config.js";
+
+      function togglePassword() {
+        const pass = document.getElementById("password");
+        pass.type = pass.type === "password" ? "text" : "password";
+      }
+
+      document
+        .getElementById("loginForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+          const phoneVal = document.getElementById("phone").value.trim();
+          const passwordVal = document.getElementById("password").value.trim();
+          const btn = document.getElementById("loginBtn");
+          const msg = document.getElementById("loginSuccess");
+
+          btn.innerText = "Signing...";
+          btn.disabled = true;
+
+          try {
+            const res = await fetch(`${API_BASE_URL}/api/auth/login`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ phone: phoneVal, password: passwordVal }),
+            });
+
+            const data = await res.json();
+            if (data.success) {
+              localStorage.setItem("userId", data.user._id);
+              msg.innerText = "Login Successful";
+              msg.style.display = "block";
+              setTimeout(
+                () => (window.location.href = "verification.html"),
+                1000
+              );
+            } else {
+              alert("Login failed");
+            }
+          } catch (err) {
+            alert("Server not responding");
+          } finally {
+            btn.innerText = "SIGN IN...";
+            btn.disabled = false;
+          }
+        });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EZpay Customer service</title>
+
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body{
+            width: 100%;
+            min-height: 100vh;
+            background: #fff;
+            overflow-x: hidden;
+        }
+
+        /* Background full image */
+        .top-img{
+            width: 100%;
+        }
+        .top-img img{
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Bottom Fixed Make Money Button */
+        .btn-fixed{
+            position: fixed;
+            bottom: 10px;     /* slight gap from bottom */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            max-width: 320px;
+            cursor: pointer;
+            z-index: 999;
+        }
+
+        .btn-fixed img{
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Scrollable Background Image -->
+    <div class="top-img">
+        <img src="H5-bg.5392afd9.png" alt="Background">
+    </div>
+
+    <!-- FIXED Make Money Button -->
+    <div class="btn-fixed" onclick="goSignin()">
+        <img src="make-money.png" alt="Make Money">
+    </div>
+
+    <script>
+        function goSignin(){
+            window.location.href = "signin.html";
+        }
+    </script>
+
+</body>
+</html>
